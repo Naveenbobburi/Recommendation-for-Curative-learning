@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Learning Recommender</title>
+  <style>
+    body { font-family: Arial; max-width: 700px; margin: auto; padding: 30px; }
+    textarea { width: 100%; height: 100px; }
+    button { padding: 10px 20px; }
+    pre { background: #f0f0f0; padding: 15px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>Enter a topic you're interested in:</h2>
+  <textarea id="topicInput" placeholder="e.g. Elon Musk, AI, SpaceX..."></textarea><br><br>
+  <button onclick="getRecommendations()">Get Recommendations</button>
+
+  <h3>Recommendations:</h3>
+  <pre id="output">Waiting for input...</pre>
+
+  <script>
+    async function getRecommendations() {
+      const topic = document.getElementById("topicInput").value;
+      const output = document.getElementById("output");
+      output.textContent = "Loading...";
+
+      const response = await fetch("http://127.0.0.1:8000/recommend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ topic: topic })
+      });
+
+      const data = await response.json();
+      output.textContent = data.recommendations || "No response received.";
+    }
+  </script>
+</body>
+</html>
